@@ -1,0 +1,15 @@
+To run jrme:
+
+1. Get a working version of jmonkeyengine
+ (from source)
+ - checkout source
+ - and dist-all
+2. Update bin/sample script
+ - define JME_DIR to be directory where you checked out jmonkeyengine
+ - change LIB_PATH if you are not on MacOS to proper native directory
+
+To run samples:
+
+bin/sample <name_of_sample>
+
+(e.g. bin/sample king_pong)

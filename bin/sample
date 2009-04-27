@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# XXX: Change me to where you checkout jmonkeyengine source distro
+export JME_DIR=$HOME/work/jmonkeyengine
+
+export JME_DIST_DIR=$JME_DIR/target
+export JME_LIB_DIR=$JME_DIR/lib
+export CLASSPATH=lib/data.jar:$JME_DIST_DIR/jme.jar:$JME_DIST_DIR/jme-effects.jar:$JME_DIST_DIR/jme-terrain.jar:$JME_LIB_DIR/lwjgl/lwjgl.jar:$JME_LIB_DIR/lwjgl/jinput.jar:$JME_LIB_DIR/lwjgl/lwjgl_util.jar:$JME_LIB_DIR/jorbis/jorbis-0.0.17.jar
+
+# XXX: If not on MacOS change this to match your native location
+export LIB_PATH=-J-Djava.library.path=$JME_LIB_DIR/lwjgl/native/macosx
+#export PROFILE=-J-agentpath:$HOME/opt/yourkit/bin/mac/libyjpagent.jnilib=tracing
+
+jruby -Ilib:samples/$1 $PROFILE $LIB_PATH samples/$1.rb
