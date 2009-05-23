@@ -1,0 +1,13 @@
+Manifest.txt
+pkg
+*.gem
+*.tgz
+doc
+build.xml
+nbproject
+TAGS
+*~
+*.log
+patches*
+*#
+.stgit-edit.txt
