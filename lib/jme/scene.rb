@@ -1,4 +1,3 @@
-
 class Geometry
   def collides_with?(other)
     has_collision(other, false)
@@ -67,6 +66,6 @@ class Spatial
   def to_pass
     render_pass = RenderPass.new
     render_pass.add(self)
-    render_pass    
+    render_pass
   end
 end

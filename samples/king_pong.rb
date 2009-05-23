@@ -10,14 +10,14 @@ class Main < SimplePassGame
     display.title = "King Pong"
     [lights, camera, action]
 
-    @sky = Sky.new(self)
-    terrain = Terrain.new(self)
-    @goal_walls = GoalWalls.new(self)
-    @side_walls = SideWalls.new(self)
-    @ball = Ball.new(self, terrain)#, ExplosionManager.new)
-    @paddle1 = Paddle.new(self, "Player1", -Arena::SIZE)
-    @paddle2 = Paddle.new(self, "Player2", Arena::SIZE)
-    @arena = Arena.new(self, @side_walls, @goal_walls, @ball)
+    @sky = Sky.new
+    terrain = Terrain.new
+    @goal_walls = GoalWalls.new
+    @side_walls = SideWalls.new
+    @ball = Ball.new terrain
+    @paddle1 = Paddle.new "Player1", -Arena::SIZE
+    @paddle2 = Paddle.new "Player2", Arena::SIZE
+    @arena = Arena.new @side_walls, @goal_walls, @ball
     root_node << @sky << @arena << terrain << @paddle1 << @paddle2
     root_node.updateGeometricState(0.0, true)
     root_node.updateRenderState

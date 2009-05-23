@@ -46,6 +46,10 @@ class AbsoluteMouse
   end
 end
 
+class InputHandler
+  field_accessor :event, :mouse
+end
+
 class KeyBindingManager
   def self.define(bindings)
     manager = KeyBindingManager.key_binding_manager

@@ -1,9 +1,9 @@
 class Arena < Node
   SIZE = 400.0
   
-  def initialize(game, side_walls, goal_walls, ball)
-    super("Arena")
-    texture(game, "data/images/rockwall2.jpg")
+  def initialize(side_walls, goal_walls, ball)
+    super "Arena"
+    texture "data/images/rockwall2.jpg"
     local_translation.set(0, 0, 0)
     self << side_walls << goal_walls << ball
   end
@@ -17,13 +17,13 @@ end
 class GoalWalls < Walls
   LENGTH = Arena::SIZE
 
-  def initialize(game)
+  def initialize
     super("GoalWalls")
-    wall = Box.new("player_wall1", DEPTH, HEIGHT, LENGTH)
+    wall = Box.new("player_wall1", Vector3f.new, DEPTH, HEIGHT, LENGTH)
     wall.local_translation.set(Arena::SIZE + Arena::SIZE/12, 0, 0)
     self << wall
 
-    wall = Box.new("player_wall2", DEPTH, HEIGHT, LENGTH)
+    wall = Box.new("player_wall2", Vector3f.new, DEPTH, HEIGHT, LENGTH)
     wall.local_translation.set(-Arena::SIZE - Arena::SIZE/12, 0, 0)
     self << wall
   end
@@ -33,14 +33,14 @@ end
 class SideWalls < Walls
   LENGTH = Arena::SIZE/32
 
-  def initialize(game)
+  def initialize
     super("Sidewalls")
 
-    wall = Box.new("wall1", Arena::SIZE + Arena::SIZE/12 + DEPTH, HEIGHT, LENGTH)
+    wall = Box.new("wall1", Vector3f.new, Arena::SIZE + Arena::SIZE/12 + DEPTH, HEIGHT, LENGTH)
     wall.local_translation.set(0, 0, Arena::SIZE)
     self << wall
 
-    wall = Box.new("wall2", Arena::SIZE + Arena::SIZE/12 + DEPTH, HEIGHT, LENGTH)
+    wall = Box.new("wall2", Vector3f.new, Arena::SIZE + Arena::SIZE/12 + DEPTH, HEIGHT, LENGTH)
     wall.local_translation.set(0, 0, -Arena::SIZE)
     self << wall
   end
@@ -58,9 +58,9 @@ class Ball < Sphere
   include Rotating, Explosions
   attr_accessor :velocity
 
-  def initialize(game, terrain)
+  def initialize(terrain)
     super("Ball", Samples, Radius)
-    texture(game, "data/images/Monkey.jpg")
+    texture("data/images/Monkey.jpg")
     @velocity, @terrain = Vector3f.new(0, 0, 0), terrain
     reset(10)     # Initialize ball velocity
   end
@@ -114,8 +114,8 @@ class Paddle < Box
 
   attr_accessor :speed, :text
 
-  def initialize(game, label, x_position)
-    super(label, DEPTH, HEIGHT, LENGTH)
+  def initialize(label, x_position)
+    super(label, Vector3f.new, DEPTH, HEIGHT, LENGTH)
     local_translation.set(x_position, 0, 0)
     @score, @speed = 0, 1000.0
   end
@@ -136,7 +136,7 @@ class Paddle < Box
 end
 
 class Terrain < TerrainPage
-  def initialize(game)
+  def initialize
     texture_dir = "data/texture/"
     gray_scale = image_icon(texture_dir + "terrain/trough3.png")
     height_map = ImageBasedHeightMap.new gray_scale.image
@@ -153,7 +153,7 @@ class Terrain < TerrainPage
     pst.addSplatTexture image_icon(texture_dir + "terrainTex.png"), image_icon(texture_dir + "water.png")
     pst.createTexture(1024)
 
-    ts = game.display.renderer.createTextureState
+    ts = DisplaySystem.display_system.renderer.createTextureState
     t1 = TextureManager.load_from_image(pst.image_icon.image)
     t2 = TextureManager.load(resource(texture_dir + "Detail.jpg"))
     t1.set!(:apply => Texture::ApplyMode::Combine,
@@ -176,10 +176,10 @@ class Terrain < TerrainPage
 end
 
 class Sky < Skybox
-  def initialize(game)
+  def initialize
     dir = "data/skybox1/"    
     super("Sky", 10, 10, 10, dir + "1.jpg", dir + "3.jpg", dir + "2.jpg", dir + "4.jpg", dir + "6.jpg", dir + "5.jpg")
-    renderer = game.display.renderer
+    renderer = DisplaySystem.display_system.renderer
 
     setRenderState renderer.createCullState.set! :cull_face => CullState::Face::None, :enabled => true
     setRenderState renderer.createZBufferState.set! :enabled => false

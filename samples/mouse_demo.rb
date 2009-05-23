@@ -47,7 +47,7 @@ class SpherePlus < Sphere
     pivot.attachChild(ln)
 
     # I create a box and attach it too my lightnode.  This lets me see where my light is
-    b = Box.new("Blarg", 0.6, 0.6, 0.6)#Vector3f.new(-0.3,-0.3,-0.3), Vector3f.new(0.3,0.3,0.3))
+    b = Box.new("Blarg", Vector3f.new, 0.6, 0.6, 0.6)#Vector3f.new(-0.3,-0.3,-0.3), Vector3f.new(0.3,0.3,0.3))
 
     ln.attachChild(b)
 

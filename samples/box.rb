@@ -12,7 +12,7 @@ class Main < SimpleGame
     @mouse.center
     @mouse.registerWithInputHandler input
 
-    box = Box.new("Box", 10, 10, 10)
+    box = Box.new("Box", Vector3f.new, 10, 10, 10)
 
     root_node << box << @mouse
     root_node.cull_hint = Spatial::CullHint::Never

@@ -1,7 +1,7 @@
 
 class Box
-  def initialize(name, x, y, z)
-    super(name, Vector3f.new, x, y, z)
+  def initialize(*args)
+    super
     bound BoundingBox.new
   end
 end

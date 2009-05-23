@@ -2,7 +2,7 @@ require 'java'
 
 import java.nio.FloatBuffer
 import javax.swing.ImageIcon
-import com.jme.animation.SpatialTransformer;
+import com.jme.animation.SpatialTransformer
 import com.jme.app.AbstractGame
 import com.jme.app.BaseGame
 import com.jme.app.BaseSimpleGame
@@ -11,20 +11,29 @@ import com.jme.app.SimplePassGame
 import com.jme.bounding.BoundingBox
 import com.jme.bounding.BoundingSphere
 import com.jme.image.Texture
-import com.jme.input.AbsoluteMouse;
-import com.jme.input.FirstPersonHandler;
+import com.jme.input.AbsoluteMouse
+import com.jme.input.ChaseCamera
+import com.jme.input.FirstPersonHandler
+import com.jme.input.InputHandler
 import com.jme.input.KeyBindingManager
 import com.jme.input.KeyInput
-import com.jme.input.MouseInput;
-import com.jme.intersection.BoundingPickResults;
-import com.jme.intersection.PickResults;
+import com.jme.input.MouseInput
+import com.jme.input.action.InputAction
+import com.jme.input.action.KeyNodeBackwardAction
+import com.jme.input.action.KeyNodeForwardAction
+import com.jme.input.action.KeyNodeRotateLeftAction
+import com.jme.input.action.KeyNodeRotateRightAction
+import com.jme.input.thirdperson.ThirdPersonMouseLook
+import com.jme.intersection.BoundingPickResults
+import com.jme.intersection.PickResults
 import com.jme.light.DirectionalLight
-import com.jme.light.PointLight;
-import com.jme.light.SimpleLightNode;
+import com.jme.light.PointLight
+import com.jme.light.SimpleLightNode
 import com.jme.math.FastMath
 import com.jme.math.Plane
 import com.jme.math.Ray;
 import com.jme.math.Quaternion
+import com.jme.math.Matrix3f
 import com.jme.math.Vector2f
 import com.jme.math.Vector3f
 import com.jme.renderer.ColorRGBA
@@ -36,10 +45,12 @@ import com.jme.renderer.pass.ShadowedRenderPass
 import com.jme.scene.Controller
 import com.jme.scene.Geometry
 import com.jme.scene.Node
+import com.jme.scene.SharedMesh
 import com.jme.scene.Skybox
 import com.jme.scene.Spatial
 import com.jme.scene.Text
 import com.jme.scene.shape.Box
+import com.jme.scene.shape.Cylinder
 import com.jme.scene.shape.Quad
 import com.jme.scene.shape.Sphere
 import com.jme.scene.shape.Torus
@@ -49,18 +60,30 @@ import com.jme.scene.state.FogState
 import com.jme.scene.state.TextureState
 import com.jme.scene.state.ZBufferState
 import com.jme.system.DisplaySystem
+import com.jme.system.JmeException
 import com.jme.util.TextureManager
+import com.jme.util.Timer
+import com.jme.util.export.binary.BinaryImporter
+import com.jme.util.export.binary.BinaryExporter
 import com.jmex.effects.particles.ParticleFactory
 import com.jmex.effects.particles.ParticleMesh
 import com.jmex.effects.water.WaterRenderPass
+import com.jmex.model.collada.ColladaImporter
+import com.jmex.terrain.TerrainBlock
 import com.jmex.terrain.TerrainPage
 import com.jmex.terrain.util.ImageBasedHeightMap
+import com.jmex.terrain.util.MidPointHeightMap
+import com.jmex.terrain.util.ProceduralTextureGenerator
 import com.jmex.terrain.util.ProceduralSplatTextureGenerator
 
 class Object
   def set!(values)
     values.keys.each { |key| __send__ key.to_s + "=", values[key] }
     self
+  end
+
+  def self.new!(values)
+    self.new.set!(values)
   end
 
   def resource(url)
@@ -92,8 +115,8 @@ module RandomHelper
 end
 
 module TextureHelper
-  def texture(display_provider, url)
-    texture_state = display_provider.display.renderer.createTextureState
+  def texture(url)
+    texture_state = DisplaySystem.display_system.renderer.createTextureState
     texture = TextureManager.load(resource(url))
     texture.setWrap(Texture::WrapMode::Repeat)
     texture_state.setTexture texture
@@ -141,10 +164,12 @@ class PickResults
 end
 
 require 'jme/app'
+require 'jme/bounding'
 require 'jme/input'
 require 'jme/math'
 require 'jme/scene'
 require 'jme/shape'
+require 'jme/terrain'
 
 #### Additions to jme
 require 'jme/explosions'
