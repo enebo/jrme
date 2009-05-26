@@ -7,8 +7,8 @@ class Box
 end
 
 class Sphere
-  def initialize(name, samples, radius)
-    super(name, samples, samples, radius)
+  def initialize(*args)
+    super
     bound BoundingSphere.new
   end
 end

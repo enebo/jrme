@@ -18,6 +18,7 @@ import com.jme.input.InputHandler
 import com.jme.input.KeyBindingManager
 import com.jme.input.KeyInput
 import com.jme.input.MouseInput
+import com.jme.input.ThirdPersonHandler
 import com.jme.input.action.InputAction
 import com.jme.input.action.KeyNodeBackwardAction
 import com.jme.input.action.KeyNodeForwardAction
@@ -115,11 +116,12 @@ module RandomHelper
 end
 
 module TextureHelper
-  def texture(url)
+  def texture(url, scale=nil, repeat=Texture::WrapMode::Repeat)
     texture_state = DisplaySystem.display_system.renderer.createTextureState
     texture = TextureManager.load(resource(url))
-    texture.setWrap(Texture::WrapMode::Repeat)
-    texture_state.setTexture texture
+    texture.wrap = repeat
+    texture.scale = scale if scale
+    texture_state.texture = texture
     setRenderState texture_state
   end
 end
@@ -174,3 +176,4 @@ require 'jme/terrain'
 #### Additions to jme
 require 'jme/explosions'
 require 'jme/effects'
+require 'jme/screen_settings'
