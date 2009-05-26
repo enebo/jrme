@@ -59,7 +59,7 @@ class Ball < Sphere
   attr_accessor :velocity
 
   def initialize(terrain)
-    super("Ball", Samples, Radius)
+    super("Ball", Samples, Samples, Radius)
     texture("data/images/Monkey.jpg")
     @velocity, @terrain = Vector3f.new(0, 0, 0), terrain
     reset(10)     # Initialize ball velocity
