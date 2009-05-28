@@ -3,11 +3,16 @@ require 'field'
 require 'fence'
 require 'input_handler'
 require 'movement'
-require 'screen_settings'
 require 'vehicle'
 
 class Driving < BaseGame
   include ScreenSettings
+
+  def initialize()
+    super()
+    # We will load our own "fantastic" Flag Rush logo. Yes, I'm an artist.
+    set_config_show_mode AbstractGame::ConfigShowMode::AlwaysShow, resource("data/images/Monkey.jpg")
+  end
 
   def update(interpolation)
     # update the time to get the framerate
@@ -44,13 +49,11 @@ class Driving < BaseGame
  
   # initializes the display and camera.
   def initSystem
-    populate_settings
-
     self.display = create_display
  
     # initialize the camera
     @cam = create_camera(display)
-    @cam.setFrustumPerspective(45.0,  @width.to_f / @height, 1, 5000)
+    @cam.setFrustumPerspective(45.0,  settings.width.to_f / settings.height, 1, 5000)
     @cam.update
     display.renderer.camera = @cam
 
@@ -181,7 +184,14 @@ class Driving < BaseGame
     props.put ChaseCamera::PROP_INITIALSPHERECOORDS, Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD)
     props.put ChaseCamera::PROP_DAMPINGK, "4"
     props.put ChaseCamera::PROP_SPRINGK, "9"
-
+# Once my HashMap -> Map patch gets accepted I can use this:
+#     props = {ThirdPersonMouseLook::PROP_MAXROLLOUT => "6",
+#       ThirdPersonMouseLook::PROP_MINROLLOUT => "3",
+#       ThirdPersonMouseLook::PROP_MAXASCENT => "#{45 * FastMath::DEG_TO_RAD}",
+#       ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD),
+#       ChaseCamera::PROP_DAMPINGK => "4",
+#       ChaseCamera::PROP_SPRINGK => "9"
+#     }
 
     @chaser = ChaseCamera.new(@cam, @player, props)
     @chaser.max_distance = 8
@@ -194,7 +204,7 @@ class Driving < BaseGame
  
   # will be called if the resolution changes
   def reinit
-    @display.recreateWindow(@width, @height, @depth, @freq, @fullscreen)
+    @display.recreateWindow(settings.width, settings.height, settings.depth, settings.frequency, settings.fullscreen?)
   end
 
   def quit
@@ -207,8 +217,4 @@ class Driving < BaseGame
   end
 end
 
-app = Driving.new
-# We will load our own "fantastic" Flag Rush logo. Yes, I'm an artist.
-#app.setConfigShowMode(ConfigShowMode::AlwaysShow,
-#                      Lesson3.class.getClassLoader() .getResource("data/images/FlagRush.png"))
-app.start
+app = Driving.new.start

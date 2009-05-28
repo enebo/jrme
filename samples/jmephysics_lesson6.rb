@@ -22,7 +22,7 @@ class MyCollisionAction < InputAction
 
     # put the sphere back up
     sphere.clear_dynamics
-    sphere.local_translation.set(*Lesson5::STARTING_POINT)
+    sphere.at(*Lesson5::STARTING_POINT)
   end
 end
 
@@ -31,15 +31,13 @@ class Lesson6 < Lesson5
     super()
 
     # now create an additional floor below the existing one
-    lower_floor = physics_space.create_static_node
-    root_node << lower_floor
-    floor_box = lower_floor.create_box "floor"
-    floor_box.local_scale.set 50, 0.5, 50
-    lower_floor.local_translation.set 0, -10, 0
+    root_node << lower_floor = physics_space.create_static do
+      create_box("floor").scale(50, 0.5, 50)
+      at 0, -10, 0
+    end
 
     # We are interested in collision events with the lower floor
-    # jME Physics 2 uses SyntheticButtons to allow application to listen to such events
-    # lets obtain such a button for our lower floor
+    # jME Physics 2 uses SyntheticButtons to listen for these events
     collision_event_handler = lower_floor.collision_event_handler
     # we can subscribe for such an event with an input handler of our choice now
     input.add_action MyCollisionAction.new, collision_event_handler, false

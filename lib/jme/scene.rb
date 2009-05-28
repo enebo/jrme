@@ -56,10 +56,21 @@ class Spatial
     updateRenderState
   end
 
-  def color(displayer, values)
-    material_state = displayer.display.renderer.createMaterialState
-    render_state material_state.set! values
-    material_state
+  def color(color)
+    renderer = DisplaySystem.display_system.renderer
+    material_state = renderer.createMaterialState.set! :diffuse => color
+
+    # Some alpha value.  We need to do more to make it look ok.
+    if color.a < 1
+        blend_state = renderer.createBlendState.set! :enabled => true,
+          :blend_enabled => true, 
+          :source_function => BlendState::SourceFunction::SourceAlpha,
+          :destination_function => BlendState::DestinationFunction::OneMinusSourceAlpha
+        setRenderState blend_state
+        setRenderQueueMode Renderer::QUEUE_TRANSPARENT
+    end
+
+    setRenderState material_state
   end
   
   # The assumption is that renderpass is the most common for a common spatial.
@@ -68,4 +79,23 @@ class Spatial
     render_pass.add(self)
     render_pass
   end
+
+  # Simple abbreviated location setter
+  def at(x, y, z)
+    local_translation.set(x, y, z)
+    self
+  end
+
+  # Rotate the number of radian about a normalized axis
+  def rotate(rad, axis)
+    local_rotation.fromAngleNormalAxis rad, axis
+    self
+  end
+
+  # Simple abbreviated location setter
+  def scale(x, y, z)
+    local_scale.set(x, y, z)
+    self
+  end
+
 end
