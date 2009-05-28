@@ -14,4 +14,4 @@ export CLASSPATH=$JMEP_DIST_DIR/jme-physics.jar:$JMEP_LIB_DIR/odejava-jni.jar:li
 export LIB_PATH=-J-Djava.library.path=$JME_LIB_DIR/lwjgl/native/macosx:$JMEP_LIB_DIR
 #export PROFILE=-J-agentpath:$HOME/opt/yourkit/bin/mac/libyjpagent.jnilib=tracing
 
-jruby -Ilib:samples/$1 $PROFILE $LIB_PATH samples/$1.rb
+jruby $JRME_OPTIONS -Ilib:samples/$1 $PROFILE $LIB_PATH samples/$1.rb
