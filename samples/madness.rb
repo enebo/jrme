@@ -46,23 +46,15 @@ class Madness < SimplePhysicsGame
   end
 
   def create_camera
-    props = java.util.HashMap.new
-    props.put ThirdPersonMouseLook::PROP_MAXROLLOUT, "6"
-    props.put ThirdPersonMouseLook::PROP_MINROLLOUT, "3"
-    props.put ThirdPersonMouseLook::PROP_MAXASCENT, "#{45 * FastMath::DEG_TO_RAD}"
-    props.put ChaseCamera::PROP_INITIALSPHERECOORDS, Vector3f(5, 0, 30 * FastMath::DEG_TO_RAD)
-    props.put ChaseCamera::PROP_DAMPINGK, "4"
-    props.put ChaseCamera::PROP_SPRINGK, "9"
-# Once my HashMap -> Map patch gets accepted I can use this:
-#     props = {ThirdPersonMouseLook::PROP_MAXROLLOUT => "6",
-#       ThirdPersonMouseLook::PROP_MINROLLOUT => "3",
-#       ThirdPersonMouseLook::PROP_MAXASCENT => "#{45 * FastMath::DEG_TO_RAD}",
-#       ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD),
-#       ChaseCamera::PROP_DAMPINGK => "4",
-#       ChaseCamera::PROP_SPRINGK => "9"
-#     }
+    options = {ThirdPersonMouseLook::PROP_MAXROLLOUT => "6",
+      ThirdPersonMouseLook::PROP_MINROLLOUT => "3",
+      ThirdPersonMouseLook::PROP_MAXASCENT => "#{45 * FastMath::DEG_TO_RAD}",
+      ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD),
+      ChaseCamera::PROP_DAMPINGK => "4",
+      ChaseCamera::PROP_SPRINGK => "9"
+    }
 
-    @chaser = ChaseCamera.new(cam, @cube, props)
+    @chaser = ChaseCamera.new(cam, @cube, options)
     @chaser.max_distance = 64
     @chaser.min_distance = 32
   end
