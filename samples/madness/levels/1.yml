@@ -1,0 +1,13 @@
+- type: goal
+  x: -370
+  z: -370
+- type: bumper
+  x: 0
+  z: 0
+- type: bumper
+  x: 40
+  z: 40
+- type: freezer
+  x: -40
+  z: -40
+
