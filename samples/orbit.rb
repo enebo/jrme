@@ -66,9 +66,9 @@ class TestSimpleGame < SimpleGame
     time_per_frame = tpf
     @pivots.each { |pivot| pivot.update(time_per_frame) }
     @count += 1
-    @fps.text.replace(5, 9, format("%2.1f", timer.frame_rate)) if @count % 10 == 0
+    @fps.value = format("FPS: %4.1f", timer.frame_rate) if @count % 10 == 0
   end
 end
 
-MOONS = ARGV.shift.to_i || 50
+MOONS = (ARGV.shift || 500).to_i
 TestSimpleGame.new.start
