@@ -18,7 +18,7 @@ class PhysicsNode
   # Give this physics node a geometrical shape
   def geometry(physical_node)
     attach_child physical_node
-    @geometry = true
+#    @geometry = true
     physical_node
   end
 
@@ -29,9 +29,9 @@ class PhysicsNode
   end
 
   def frobnicate
-    if @geometry
+#    if @geometry
       generate_physics_geometry 
-      compute_mass if @material
-    end
+      compute_mass if @material && self.kind_of?(DynamicPhysicsNode)
+#    end
   end
 end

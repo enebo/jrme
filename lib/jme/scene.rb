@@ -93,9 +93,19 @@ class Spatial
   end
 
   # Simple abbreviated location setter
-  def scale(x, y, z)
-    local_scale.set(x, y, z)
+  def scale(x, y=nil, z=nil)
+    if y && z
+      local_scale.set(x, y, z) 
+    else
+      set_local_scale(x)
+    end
     self
   end
+end
 
+class Text
+  def value=(new_value)
+    self.text.length = 0
+    self.text.append new_value
+  end
 end

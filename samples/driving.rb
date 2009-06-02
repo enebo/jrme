@@ -176,22 +176,13 @@ class Driving < BaseGame
   end
 
   def build_chase_camera
-    # Why is their interface HashMap and not Map?
-    props = java.util.HashMap.new
-    props.put ThirdPersonMouseLook::PROP_MAXROLLOUT, "6"
-    props.put ThirdPersonMouseLook::PROP_MINROLLOUT, "3"
-    props.put ThirdPersonMouseLook::PROP_MAXASCENT, "#{45 * FastMath::DEG_TO_RAD}"
-    props.put ChaseCamera::PROP_INITIALSPHERECOORDS, Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD)
-    props.put ChaseCamera::PROP_DAMPINGK, "4"
-    props.put ChaseCamera::PROP_SPRINGK, "9"
-# Once my HashMap -> Map patch gets accepted I can use this:
-#     props = {ThirdPersonMouseLook::PROP_MAXROLLOUT => "6",
-#       ThirdPersonMouseLook::PROP_MINROLLOUT => "3",
-#       ThirdPersonMouseLook::PROP_MAXASCENT => "#{45 * FastMath::DEG_TO_RAD}",
-#       ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD),
-#       ChaseCamera::PROP_DAMPINGK => "4",
-#       ChaseCamera::PROP_SPRINGK => "9"
-#     }
+    props = {ThirdPersonMouseLook::PROP_MAXROLLOUT => "6",
+      ThirdPersonMouseLook::PROP_MINROLLOUT => "3",
+      ThirdPersonMouseLook::PROP_MAXASCENT => "#{45 * FastMath::DEG_TO_RAD}",
+      ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD),
+      ChaseCamera::PROP_DAMPINGK => "4",
+      ChaseCamera::PROP_SPRINGK => "9"
+    }
 
     @chaser = ChaseCamera.new(@cam, @player, props)
     @chaser.max_distance = 8

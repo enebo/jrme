@@ -60,6 +60,15 @@ class KeyBindingManager
     manager
   end
 
+  alias orig_remove remove
+  def remove(arg)
+    if arg.kind_of? Array
+      arg.each { |name| orig_remove(name) }
+    else 
+      orig_remove(arg)
+    end
+  end
+
   def valid?(name)
     isValidCommand(name, true)
   end

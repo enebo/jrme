@@ -6,4 +6,12 @@ class Numeric
     define_method(unit) { self * size }
     memo *= 10
   end
+
+  def deg_in_rad
+    self * FastMath::DEG_TO_RAD
+  end
+
+  def rad_in_deg
+    self * FastMath::RAD_TO_DEG
+  end
 end
