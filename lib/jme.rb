@@ -88,7 +88,11 @@ class Object
   end
 
   def resource(url)
-    self.java_class.class_loader.getResource url
+    begin 
+      self.java_class.class_loader.getResource url
+    rescue
+      puts "EEKEEKEKEKEKE: #{$!}"
+    end
   end
 
   def image_icon(url)

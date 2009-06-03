@@ -23,16 +23,18 @@ class Node
 end
 
 class Skybox
-  def initialize(name, x, y, z, north, south, east, west, up, down)
+  def initialize(name, x, y, z, north=nil, south=nil, east=nil, west=nil, up=nil, down=nil)
     super(name, x, y, z)
 
-    set_texture(Face::North, sky_texture(north))
-    set_texture(Face::West, sky_texture(west))
-    set_texture(Face::South, sky_texture(south))
-    set_texture(Face::East, sky_texture(east))
-    set_texture(Face::Up, sky_texture(up))
-    set_texture(Face::Down, sky_texture(down))
-    preload_textures    
+    unless north.nil?
+      set_texture(Face::North, sky_texture(north))
+      set_texture(Face::West, sky_texture(west))
+      set_texture(Face::South, sky_texture(south))
+      set_texture(Face::East, sky_texture(east))
+      set_texture(Face::Up, sky_texture(up))
+      set_texture(Face::Down, sky_texture(down))
+      preload_textures
+    end
   end
   
   def sky_texture(resource)
