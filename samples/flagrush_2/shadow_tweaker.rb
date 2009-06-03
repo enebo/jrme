@@ -2,16 +2,13 @@ java_import java.awt.Font
 java_import java.awt.GridBagConstraints
 java_import java.awt.GridBagLayout
 java_import java.awt.Insets
-java_import java.awt.event.ActionEvent
-java_import java.awt.event.ActionListener
+
 java_import javax.swing.ButtonGroup
 java_import javax.swing.JCheckBox
 java_import javax.swing.JComboBox
 java_import javax.swing.JFrame
 java_import javax.swing.JLabel
 java_import javax.swing.JRadioButton
-java_import com.jme.renderer.pass.ShadowedRenderPass
-java_import com.jme.scene.state.BlendState
 
 class ShadowTweaker < JFrame
   def initialize(pass)

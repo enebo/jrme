@@ -1,24 +1,3 @@
-java_import com.jme.image.Texture
-java_import com.jme.light.LightNode
-java_import com.jme.light.PointLight
-java_import com.jme.math.FastMath
-java_import com.jme.math.Quaternion
-java_import com.jme.math.Vector3f
-java_import com.jme.math.spring.SpringPoint
-java_import com.jme.math.spring.SpringPointForce
-java_import com.jme.renderer.ColorRGBA
-java_import com.jme.renderer.Renderer
-java_import com.jme.scene.Node
-java_import com.jme.scene.shape.Cylinder
-java_import com.jme.scene.state.CullState
-java_import com.jme.scene.state.LightState
-java_import com.jme.scene.state.TextureState
-java_import com.jme.system.DisplaySystem
-java_import com.jme.util.TextureManager
-java_import com.jmex.effects.cloth.ClothPatch
-java_import com.jmex.effects.cloth.ClothUtils
-java_import com.jmex.terrain.TerrainBlock
-
 # Flag maintains the object that is the "goal" of the game. The
 # drivers are to try to grab the flags for points. The main job of 
 # the class is to build the flag geometry, and position itself randomly
@@ -34,12 +13,12 @@ class Flag < Node
     super("flag")
     @tb = tb
     @countdown = LIFE_TIME
-    @windStrength = 15.0
-    @windDirection = Vector3f.new(0.8, 0, 0.2)
+    windStrength = 15.0
+    windDirection = Vector3f.new(0.8, 0, 0.2)
     # create a cloth patch that will handle the flag part of our flag.
     @cloth = ClothPatch.new("cloth", 25, 25, 1, 10)
     #  Add our custom flag wind force to the cloth
-    @wind = RandomFlagWindForce.new(@windStrength, @windDirection)
+    @wind = RandomFlagWindForce.new(windStrength, windDirection)
     @cloth.addForce(@wind)
     #  Add a simple gravitational force:
     @gravity = ClothUtils.createBasicGravity()

@@ -1,7 +1,3 @@
-java_import com.jme.input.InputHandler
-java_import com.jme.input.KeyBindingManager
-java_import com.jme.input.KeyInput
-
 class FlagRushHandler < InputHandler
   def update(time)
     return if ( !isEnabled() ) 

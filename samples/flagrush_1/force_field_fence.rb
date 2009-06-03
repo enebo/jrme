@@ -1,18 +1,3 @@
-java_import com.jme.bounding.BoundingBox
-java_import com.jme.image.Texture
-java_import com.jme.math.FastMath
-java_import com.jme.math.Quaternion
-java_import com.jme.math.Vector3f
-java_import com.jme.renderer.Renderer
-java_import com.jme.scene.Node
-java_import com.jme.scene.SharedMesh
-java_import com.jme.scene.shape.Box
-java_import com.jme.scene.shape.Cylinder
-java_import com.jme.scene.state.BlendState
-java_import com.jme.scene.state.TextureState
-java_import com.jme.system.DisplaySystem
-java_import com.jme.util.TextureManager
-
 # ForceFieldFence creates a new Node that contains all the objects that make up the 
 # fence object in the game. (from tutorial form Mark Powell)
 class ForceFieldFence < Node

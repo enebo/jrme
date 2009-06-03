@@ -1,8 +1,3 @@
-java_import com.jme.input.action.InputActionEvent
-java_import com.jme.input.action.KeyInputAction
-java_import com.jme.math.FastMath
-java_import com.jme.math.Matrix3f
-
 # VehicleRotateLeftAction turns the vehicle to the left (while 
 class VehicleRotateAction < KeyInputAction
   RIGHT = 0

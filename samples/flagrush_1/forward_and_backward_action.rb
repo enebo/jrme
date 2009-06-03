@@ -1,6 +1,3 @@
-java_import com.jme.input.action.InputActionEvent
-java_import com.jme.input.action.KeyInputAction
-
 # AccelerateAction defines the action that occurs when the key is pressed to 
 # speed the Vehicle up. It obtains the velocity of the vehicle and 
 # translates the vehicle by this value.
