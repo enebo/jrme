@@ -17,6 +17,7 @@ import com.jme.input.FirstPersonHandler
 import com.jme.input.InputHandler
 import com.jme.input.KeyBindingManager
 import com.jme.input.KeyInput
+import com.jme.input.action.KeyInputAction
 import com.jme.input.MouseInput
 import com.jme.input.ThirdPersonHandler
 import com.jme.input.action.InputAction
@@ -28,6 +29,7 @@ import com.jme.input.thirdperson.ThirdPersonMouseLook
 import com.jme.intersection.BoundingPickResults
 import com.jme.intersection.PickResults
 import com.jme.light.DirectionalLight
+import com.jme.light.LightNode
 import com.jme.light.PointLight
 import com.jme.light.SimpleLightNode
 import com.jme.math.FastMath
@@ -37,6 +39,7 @@ import com.jme.math.Quaternion
 import com.jme.math.Matrix3f
 import com.jme.math.Vector2f
 import com.jme.math.Vector3f
+import com.jme.math.spring.SpringPointForce
 import com.jme.renderer.ColorRGBA
 import com.jme.renderer.Renderer
 import com.jme.renderer.pass.BasicPassManager
@@ -66,6 +69,8 @@ import com.jme.util.TextureManager
 import com.jme.util.Timer
 import com.jme.util.export.binary.BinaryImporter
 import com.jme.util.export.binary.BinaryExporter
+import com.jmex.effects.cloth.ClothPatch
+import com.jmex.effects.cloth.ClothUtils
 import com.jmex.effects.particles.ParticleFactory
 import com.jmex.effects.particles.ParticleMesh
 import com.jmex.effects.water.WaterRenderPass
@@ -88,11 +93,7 @@ class Object
   end
 
   def resource(url)
-    begin 
-      self.java_class.class_loader.getResource url
-    rescue
-      puts "EEKEEKEKEKEKE: #{$!}"
-    end
+    self.java_class.class_loader.getResource url
   end
 
   def image_icon(url)
