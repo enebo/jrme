@@ -82,7 +82,6 @@ class FlagRush < BaseGame
   end
 
   def initSystem
-    puts "A.1"
     # store the settings information
     @width = settings.getWidth()
     @height = settings.getHeight()
@@ -120,7 +119,6 @@ class FlagRush < BaseGame
   end
 
   def initGame
-    puts "B.1"
     display.setTitle("Flag Rush")
         
     @scene = Node.new("Scene graph node")
@@ -159,7 +157,6 @@ class FlagRush < BaseGame
     # update the scene graph for rendering
     @scene.updateGeometricState(0.0, true)
     @scene.updateRenderState()
-    puts "B.2"
   end
     
   def buildPassManager()
