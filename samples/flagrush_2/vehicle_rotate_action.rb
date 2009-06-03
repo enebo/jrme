@@ -9,35 +9,35 @@ class VehicleRotateAction < KeyInputAction
     @vehicle = vehicle
     @direction = direction
     # temporary variables to handle rotation
-    @incr = Matrix3f.new()
-    @tempMa = Matrix3f.new()
-    @tempMb = Matrix3f.new()
+    @incr = Matrix3f.new
+    @tempMa = Matrix3f.new
+    @tempMb = Matrix3f.new
 
     # we are using +Y as our up
-    @upAxis = Vector3f.new(0,1,0)
+    @up_axis = Vector3f.new 0,1,0
     @modifier = 1
   end
 
   # turn the vehicle by its turning speed. If the vehicle is traveling 
   # backwards, swap direction.
   def performAction(evt)
-    if(@vehicle.getVelocity() > -FastMath::FLT_EPSILON && @vehicle.getVelocity() < FastMath::FLT_EPSILON)
-        return
-    end
+    return if @vehicle.velocity > -FastMath::FLT_EPSILON && @vehicle.velocity < FastMath::FLT_EPSILON
+
     # affect the direction
     if(@direction == LEFT)
       @modifier = 1
     elsif(@direction == RIGHT)
-      @modifier = -1;
+      @modifier = -1
     end
-    # we want to turn differently depending on which direction we are traveling in.
-    if(@vehicle.getVelocity < 0)
-      @incr.fromAngleNormalAxis(-@modifier * @vehicle.getTurnSpeed() * evt.getTime(), @upAxis)
+
+    # we want to turn differently depending on which direction we are traveling
+    if @vehicle.velocity < 0
+      @incr.from_angle_normal_axis -@modifier * @vehicle.turn_speed * evt.time, @up_axis
     else
-      @incr.fromAngleNormalAxis(@modifier * @vehicle.getTurnSpeed() * evt.getTime(), @upAxis)
+      @incr.from_angle_normal_axis @modifier * @vehicle.turn_speed * evt.time, @up_axis
     end
-    @vehicle.getLocalRotation().fromRotationMatrix(@incr.mult(@vehicle.getLocalRotation().toRotationMatrix(@tempMa), @tempMb))
-    @vehicle.getLocalRotation().normalize()
-    @vehicle.setRotateOn(@modifier)
+    @vehicle.local_rotation.from_rotation_matrix @incr.mult(@vehicle.local_rotation.to_rotation_matrix(@tempMa), @tempMb)
+    @vehicle.local_rotation.normalize
+    @vehicle.rotate_on = @modifier
   end
 end

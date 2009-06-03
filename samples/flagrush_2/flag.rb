@@ -14,29 +14,26 @@ class Flag < Node
     super("flag")
     @tb = tb
     @countdown = LIFE_TIME
-    wind_strength = 15.0
-    wind_direction = Vector3f.new(0.8, 0, 0.2)
     # create a cloth patch that will handle the flag part of our flag.
     @cloth = ClothPatch.new("cloth", 25, 25, 1, 10)
     #  Add our custom flag wind force to the cloth
-    @wind = RandomFlagWindForce.new(wind_strength, wind_direction)
-    @cloth.addForce(@wind)
-    #  Add a simple gravitational force:
-    @gravity = ClothUtils.createBasicGravity()
-    @cloth.addForce(@gravity)
+    wind_strength = 15.0
+    wind_direction = Vector3f.new(0.8, 0, 0.2)
+    @cloth.add_force RandomFlagWindForce.new(wind_strength, wind_direction)
+    @cloth.add_force ClothUtils.create_basic_gravity
         
     # Create the flag pole
     c = Cylinder.new("pole", 10, 10, 0.5, 50 )
-    attachChild(c)
-    q = Quaternion.new()
+    attach_child c
+    q = Quaternion.new
     # rotate the cylinder to be vertical
-    q.fromAngleAxis(FastMath::PI/2, Vector3f.new(1,0,0))
-    c.setLocalRotation(q)
-    c.setLocalTranslation(Vector3f.new(-12.5,-12.5,0))
+    q.from_angle_axis FastMath::PI/2, Vector3f.new(1, 0, 0)
+    c.local_rotation = q
+    c.local_translation = Vector3f.new -12.5, -12.5, 0
 
     # create a texture that the flag will display.
     # Let's promote jME! 
-    ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState()
+    ts = DisplaySystem.display_system.renderer.create_texture_state
     ts.setTexture(TextureManager.loadTexture(resource("data/images/Monkey.jpg"),
             Texture::MinificationFilter::Trilinear,
             Texture::MagnificationFilter::Bilinear))
@@ -44,29 +41,29 @@ class Flag < Node
     # We'll use a LightNode to give more lighting to the flag, we use the node because
     # it will allow it to move with the flag as it hops around.
     # first create the light
-    dr = PointLight.new()
-    dr.setEnabled( true )
-    dr.setDiffuse( ColorRGBA.new( 1, 1, 1, 1 ) )
-    dr.setAmbient( ColorRGBA.new( 0.5, 0.5, 0.5, 1 ) )
-    dr.setLocation( Vector3f.new( 0.5, -0.5, 0 ) )
+    dr = PointLight.new
+    dr.enabled = true
+    dr.diffuse = ColorRGBA.new 1, 1, 1, 1
+    dr.ambient = ColorRGBA.new 0.5, 0.5, 0.5, 1 
+    dr.location = Vector3f.new 0.5, -0.5, 0 
     # next the state
-    lightState = DisplaySystem.getDisplaySystem().getRenderer().createLightState()
-    lightState.setEnabled(true)
-    lightState.setTwoSidedLighting( true )
-    lightState.attach(dr)
+    lightState = DisplaySystem.display_system.renderer.create_light_state
+    lightState.enabled = true
+    lightState.two_sided_lighting = true
+    lightState.attach dr
     # last the node
     lightNode = LightNode.new( "light" )
-    lightNode.setLight( dr )
-    lightNode.setLocalTranslation(Vector3f.new(15,10,0))
+    lightNode.light = dr
+    lightNode.local_translation = Vector3f.new 15, 10, 0
 
     setRenderState(lightState)
     attachChild(lightNode)
         
     @cloth.setRenderState(ts)
     # We want to see both sides of the flag, so we will turn back facing culling OFF.
-    cs = DisplaySystem.getDisplaySystem().getRenderer().createCullState()
-    cs.setCullFace(CullState::Face::None)
-    @cloth.setRenderState(cs)
+    cs = DisplaySystem.display_system.renderer.create_cull_state
+    cs.cull_face = CullState::Face::None
+    @cloth.setRenderState cs
     attachChild(@cloth)
         
     # We need to attach a few points of the cloth to the poll. These points shouldn't
@@ -108,12 +105,12 @@ class Flag < Node
   # set the values to be between (45 and 175) which places it within the force field
   # level.
   def place_flag
-    x = 45 + FastMath.nextRandomFloat() * 130
-    z = 45 + FastMath.nextRandomFloat() * 130
-    y = @tb.getHeight(x,z) + 7.5
-    localTranslation.x = x
-    localTranslation.y = y
-    localTranslation.z = z
+    x = 45 + FastMath.next_random_float * 130
+    z = 45 + FastMath.next_random_float * 130
+    y = @tb.get_height(x,z) + 7.5
+    local_translation.x = x
+    local_translation.y = y
+    local_translation.z = z
   end
     
   # RandomFlagWindForce defines a SpringPointForce that will slighly adjust the
@@ -126,18 +123,18 @@ class Flag < Node
     def initialize(strength, direction)
       super()
       @strength = strength
-      @windDirection = direction
+      @direction = direction
     end
         
     # called during the update of the cloth. Will adjust the direction slightly
     # and adjust the strength slightly.
     def apply(dt, node)
-        @windDirection.x += dt * (FastMath.nextRandomFloat() - 0.5)
-        @windDirection.z += dt * (FastMath.nextRandomFloat() - 0.5)
-        @windDirection.normalize()
-        tStr = FastMath.nextRandomFloat() * @strength
-        node.acceleration.addLocal(@windDirection.x * tStr, 
-                     @windDirection.y * tStr, @windDirection.z * tStr)
+      @direction.x += dt * (FastMath.next_random_float - 0.5)
+      @direction.z += dt * (FastMath.next_random_float - 0.5)
+      @direction.normalize
+      tStr = FastMath.next_random_float * @strength
+      node.acceleration.add_local(@direction.x * tStr, @direction.y * tStr, 
+                                  @direction.z * tStr)
     end
   end
 end

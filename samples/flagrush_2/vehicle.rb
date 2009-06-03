@@ -30,7 +30,7 @@ class Vehicle < Node
     
   # update applies the translation to the vehicle based on the time passed.
   def update(time)
-    self.localTranslation.addLocal(self.localRotation.getRotationColumn(2, @temp_va).multLocal(@velocity * time))
+    localTranslation.addLocal(self.localRotation.get_rotation_column(2, @temp_va).multLocal(@velocity * time))
     rotateWheels(time);
     processLean(time);
   end
@@ -52,8 +52,8 @@ class Vehicle < Node
         end
       end
       @rot_quat.fromAngleAxis(@angle, @wheel_axis)
-      @frontwheel.getLocalRotation().multLocal(@rot_quat)
-      @backwheel.setLocalRotation(@frontwheel.getLocalRotation())
+      @frontwheel.local_rotation.multLocal(@rot_quat)
+      @backwheel.setLocalRotation(@frontwheel.local_rotation())
     end
   end
 
@@ -107,12 +107,12 @@ class Vehicle < Node
   end
     
   # retrieves the weight of this vehicle.
-  def getWeight
+  def weight
     return @weight
   end
 
   # the acceleration of this vehicle.
-  def getAcceleration
+  def acceleration
     return @acceleration
   end
 
@@ -122,7 +122,7 @@ class Vehicle < Node
   end
 
   # retrieves the braking speed of this vehicle.
-  def getBraking()
+  def braking()
     return @braking
   end
 
@@ -132,7 +132,7 @@ class Vehicle < Node
   end
 
   # retrieves the model Spatial of this vehicle.
-  def getModel
+  def model
     return @model
   end
 
@@ -144,47 +144,47 @@ class Vehicle < Node
     attachChild(@model)
     #obtain references to the front and back wheel
         
-    @backwheel = model.getChild("backwheel")
-    @frontwheel = model.getChild("frontwheel")
+    @backwheel = model.get_child("backwheel")
+    @frontwheel = model.get_child("frontwheel")
   end
 
   # retrieves the velocity of this vehicle.
-  def getVelocity()
+  def velocity
     return @velocity
   end
 
   # set the velocity of this vehicle
-  def setVelocity(velocity)
+  def velocity=(velocity)
     @velocity = velocity
   end
     
   # retrieves the turn speed of this vehicle.
-  def getTurnSpeed()
+  def turn_speed
     return @turn_speed
   end
 
   # set the turn speed of this vehicle
-  def setTurnSpeed(turn_speed)
+  def turn_speed=(turn_speed)
     @turn_speed = turn_speed
   end
     
   # retrieves the maximum speed of this vehicle.
-  def getMaxSpeed()
+  def max_speed
     return @max_speed
   end
 
   # sets the maximum speed of this vehicle.
-  def setMaxSpeed(max_speed)
+  def max_speed=(max_speed)
     @max_speed = max_speed;
   end
 
   # retrieves the minimum speed of this vehicle.
-  def getMinSpeed()
+  def min_speed
     return @min_speed
   end
 
   # sets the minimum speed of this vehicle.
-  def setMinSpeed(min_speed)
+  def min_speed=(min_speed)
     @min_speed = min_speed
   end
     
@@ -218,7 +218,7 @@ class Vehicle < Node
     end
   end
 
-  def setRotateOn(modifier)
+  def rotate_on=(modifier)
     @lean = modifier
   end
 end

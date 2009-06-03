@@ -13,12 +13,13 @@ class ForwardAndBackwardAction < KeyInputAction
     @direction = direction
   end
 
-  # the action calls the vehicle's accelerate or brake command which adjusts its velocity.
+  # the action calls the vehicle's accelerate or brake command which adjusts 
+  # its velocity.
   def performAction(evt)
     if(@direction == FORWARD)
-      @node.accelerate(evt.getTime())
+      @node.accelerate evt.time
     elsif(@direction == BACKWARD)
-      @node.brake(evt.getTime())
+      @node.brake evt.time
     end
   end
 end
