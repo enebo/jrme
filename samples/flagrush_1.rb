@@ -1,8 +1,8 @@
 require 'jme'
-java_import java.io.IOException
-java_import java.util.HashMap
-java_import java.util.logging.Level
-java_import java.util.logging.Logger
+import java.io.IOException
+import java.util.HashMap
+import java.util.logging.Level
+import java.util.logging.Logger
 
 require 'drift_action'
 require 'flag_rush_handler'

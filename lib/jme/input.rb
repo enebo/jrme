@@ -73,3 +73,20 @@ class KeyBindingManager
     isValidCommand(name, true)
   end
 end
+
+class KeyInputAction
+  def self.impl(&block)
+    ConcreteKeyInputAction.new(&block)
+  end
+end
+
+class ConcreteKeyInputAction < KeyInputAction
+  def initialize(&block)
+    super()
+    @block = block
+  end
+    
+  def performAction(event)
+    @block.call event
+  end
+end

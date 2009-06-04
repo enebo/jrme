@@ -4,12 +4,10 @@ java_import java.util.HashMap
 java_import java.util.logging.Level
 java_import java.util.logging.Logger
 
-require 'drift_action'
 require 'flag_rush_handler'
 require 'force_field_fence'
 require 'vehicle'
 require 'flag'
-require 'forward_and_backward_action'
 require 'vehicle_rotate_action'
 require 'shadow_tweaker'
 

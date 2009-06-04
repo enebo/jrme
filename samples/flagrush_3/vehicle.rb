@@ -5,6 +5,10 @@
 # etc. (originally from Mark Powell)
 class Vehicle < Node
   LEAN_BUFFER = 0.05
+
+  attr_accessor :velocity, :turn_speed, :min_speed, :max_speed
+  attr_accessor :braking, :acceleration, :weight
+  attr_reader :model
     
   # Basic constructor takes the model that represents the graphical 
   # aspects of this Vehicle.
@@ -100,41 +104,6 @@ class Vehicle < Node
         
     @lean = 0;
   end
-    
-  # set the weight of this vehicle
-  def weight=(weight)
-    @weight = weight
-  end
-    
-  # retrieves the weight of this vehicle.
-  def weight
-    return @weight
-  end
-
-  # the acceleration of this vehicle.
-  def acceleration
-    return @acceleration
-  end
-
-  # set the acceleration rate of this vehicle
-  def acceleration=(acceleration)
-    @acceleration = acceleration
-  end
-
-  # retrieves the braking speed of this vehicle.
-  def braking()
-    return @braking
-  end
-
-  # set the braking speed of this vehicle
-  def braking=(braking)
-    @braking = braking
-  end
-
-  # retrieves the model Spatial of this vehicle.
-  def model
-    return @model
-  end
 
   # sets the model spatial of this vehicle. It first
   # detaches any previously attached models.
@@ -146,46 +115,6 @@ class Vehicle < Node
         
     @backwheel = model.get_child("backwheel")
     @frontwheel = model.get_child("frontwheel")
-  end
-
-  # retrieves the velocity of this vehicle.
-  def velocity
-    return @velocity
-  end
-
-  # set the velocity of this vehicle
-  def velocity=(velocity)
-    @velocity = velocity
-  end
-    
-  # retrieves the turn speed of this vehicle.
-  def turn_speed
-    return @turn_speed
-  end
-
-  # set the turn speed of this vehicle
-  def turn_speed=(turn_speed)
-    @turn_speed = turn_speed
-  end
-    
-  # retrieves the maximum speed of this vehicle.
-  def max_speed
-    return @max_speed
-  end
-
-  # sets the maximum speed of this vehicle.
-  def max_speed=(max_speed)
-    @max_speed = max_speed;
-  end
-
-  # retrieves the minimum speed of this vehicle.
-  def min_speed
-    return @min_speed
-  end
-
-  # sets the minimum speed of this vehicle.
-  def min_speed=(min_speed)
-    @min_speed = min_speed
   end
     
   # brake adjusts the velocity of the vehicle based on the braking speed. If the
