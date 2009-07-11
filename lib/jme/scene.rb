@@ -27,6 +27,16 @@ class Skybox
     super(name, x, y, z)
 
     unless north.nil?
+      # Convention that sky boxes in a directory have the same names.
+      if south.nil?
+        directory = north
+        north = directory + "north.jpg"
+        south = directory + "south.jpg"
+        east = directory + "east.jpg"
+        west = directory + "west.jpg"
+        up = directory + "up.jpg"
+        down = directory + "down.jpg"
+      end
       set_texture(Face::North, sky_texture(north))
       set_texture(Face::West, sky_texture(west))
       set_texture(Face::South, sky_texture(south))
