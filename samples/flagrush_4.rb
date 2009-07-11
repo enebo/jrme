@@ -253,48 +253,22 @@ class FlagRush < BaseGame
   end
     
   def build_sky_box
-    @skybox = Skybox.new("skybox", 10, 10, 10)
-
-    north = TextureManager.load_texture(resource("data/texture/north.jpg"),
-            Texture::MinificationFilter::BilinearNearestMipMap,
-            Texture::MagnificationFilter::Bilinear)
-    south = TextureManager.load_texture(resource("data/texture/south.jpg"),
-            Texture::MinificationFilter::BilinearNearestMipMap,
-            Texture::MagnificationFilter::Bilinear)
-    east = TextureManager.load_texture(resource("data/texture/east.jpg"),
-            Texture::MinificationFilter::BilinearNearestMipMap,
-            Texture::MagnificationFilter::Bilinear)
-    west = TextureManager.load_texture(resource("data/texture/west.jpg"),
-            Texture::MinificationFilter::BilinearNearestMipMap,
-            Texture::MagnificationFilter::Bilinear)
-    up = TextureManager.load_texture(resource("data/texture/top.jpg"),
-            Texture::MinificationFilter::BilinearNearestMipMap,
-            Texture::MagnificationFilter::Bilinear)
-    down = TextureManager.load_texture(resource("data/texture/bottom.jpg"),
-            Texture::MinificationFilter::BilinearNearestMipMap,
-            Texture::MagnificationFilter::Bilinear)
-
-    @skybox.setTexture(Skybox::Face::North, north)
-    @skybox.setTexture(Skybox::Face::West, west)
-    @skybox.setTexture(Skybox::Face::South, south)
-    @skybox.setTexture(Skybox::Face::East, east)
-    @skybox.setTexture(Skybox::Face::Up, up)
-    @skybox.setTexture(Skybox::Face::Down, down)
-    @skybox.preload_textures
+    @skybox = Skybox.new("skybox", 10, 10, 10,
+      "/data/texture/north.jpg", "/data/texture/south.jpg", 
+      "/data/texture/east.jpg", "/data/texture/west.jpg", 
+      "/data/texture/top.jpg", "/data/texture/bottom.jpg")
     @skybox.updateRenderState
   end
     
   def build_chase_camera
-    props = {ThirdPersonMouseLook::PROP_MAXROLLOUT => "6",
-      ThirdPersonMouseLook::PROP_MINROLLOUT => "3",
-      ThirdPersonMouseLook::PROP_MAXASCENT => "#{45 * FastMath::DEG_TO_RAD}",
-      ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5, 0, 30 * FastMath::DEG_TO_RAD),
-      ChaseCamera::PROP_DAMPINGK => "4",
-      ChaseCamera::PROP_SPRINGK => "9"
-    }
-    @chaser = ChaseCamera.new(@cam, @player, props)
-    @chaser.setMaxDistance(8)
-    @chaser.setMinDistance(2)
+    # set up our chase camera so we can follow the bike
+    @chaser = ChaseCamera.create(@cam, @player) do
+      mouse_look.min_roll_out, mouse_look.max_roll_out = 3, 6
+      mouse_look.max_ascent = 45.deg_in_rad
+      damping_k, spring_k = 4, 9
+      min_distance, max_distance = 8, 2
+      set_ideal_sphere_coords Vector3f(5, 0, 30.deg_in_rad)
+    end
   end
 
   def build_input
