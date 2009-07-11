@@ -13,8 +13,9 @@ class PhysicsSpace
 end
 
 class PhysicsNode
-  # Give this physics node a geometrical shape
-  def geometry(physical_node)
+  # Give this physics node a geometrical shape or retrieve physical node
+  def geometry(physical_node=nil)
+    return get_child(0) unless physical_node
     attach_child physical_node
     physical_node
   end

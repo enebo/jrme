@@ -74,16 +74,16 @@ class KeyBindingManager
   end
 end
 
-class KeyInputAction
+class InputAction
   # Make an action which will invoke the supplied block every time there
   # is an action event:
-  #   forward = KeyInputAction.impl { |event| node.accelerate event.time }
-  def self.impl(&block)
-    ConcreteKeyInputAction.new(&block)
+  #   forward = InputAction.create { |event| node.accelerate event.time }
+  def self.create(&block)
+    BlockBasedInputAction.new(&block)
   end
 end
 
-class ConcreteKeyInputAction < KeyInputAction
+class BlockBasedInputAction < InputAction
   def initialize(&block)
     super()
     @block = block

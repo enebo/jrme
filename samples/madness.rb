@@ -1,6 +1,5 @@
 # 1. Make skybox follow camera
 # 2. Do you win/you lose + graphics
-# 3. change original chase camera location
 
 require 'jme'
 require 'jmephysics'
@@ -18,24 +17,19 @@ class MoveAction < InputAction
 end
 
 class ObstacleAction < InputAction
-  def initialize(game, cube)
+  def initialize(game)
     super()
-    @game, @cube = game, cube
+    @game = game
+  end
+
+  def collided_with(contact)
+    @game.icecube == contact.node1 ? contact.node2 : contact.node1
   end
 
   def performAction(event)
-    contact_info = event.trigger_data
-
-    # We want static node that we collide with so we can ask what it is.
-    if contact_info.node2.kind_of? DynamicPhysicsNode 
-      obstacle = contact_info.node1
-    elsif contact_info.node1.kind_of? DynamicPhysicsNode 
-      obstacle = contact_info.node2
-    end
-
-    case obstacle.get_child(0).name
+    case collided_with(event.trigger_data).geometry.name
       when "freezer":
-        @cube.scale Madness::CUBE_SIZE
+        @game.icecube.geometry.scale Madness::CUBE_SIZE
       when "goal":
         @game.finish "You won!"
     end
@@ -43,22 +37,22 @@ class ObstacleAction < InputAction
 end
 
 class Madness < SimplePhysicsGame
-  LEVEL_SIZE = 400.m
-  START = 370.m, 100.m, 370.m
-  CUBE_SIZE = 4.m
+  LEVEL_SIZE, START, CUBE_SIZE = 400.m, [370.m, 100.m, 370.m], 4.m
+
+  attr_reader :icecube
 
   def simpleInitGame
     @velocity_holder = Vector3f.new
-    [create_sky, create_level, create_icecube, create_keybindings]
-    [create_obstacles, create_camera, create_status]
+    [create_sky, create_icecube, create_level, create_keybindings]
+    [create_camera, create_status]
 
     @time = 0.0
     physics_space.add_to_update_callbacks do |space, time|
       if @time > 0.5
-        if @cube_geom.local_scale.x < 1.mm
+        if @icecube.geometry.local_scale.x < 1.mm
           finish "You Lose!"
         else
-          @cube_geom.scale @cube_geom.local_scale.x - 5.cm
+          @icecube.geometry.scale @icecube.geometry.local_scale.x - 5.cm
           @time = 0.0
         end
       end
@@ -68,14 +62,14 @@ class Madness < SimplePhysicsGame
 
   def simpleUpdate
     @chaser.update tpf # update chase camera for moving icecube
-
     @info_text.value = "Velocity: #{@icecube.get_linear_velocity(@velocity_holder)}"
   end
 
   def reset
-    self.pause = true
     @icecube.at *START
-    @cube_geom.scale CUBE_SIZE
+    @icecube.set_linear_velocity(Vector3f(0,0,0))
+    @icecube.set_angular_velocity(Vector3f(0,0,0))
+    @icecube.geometry.scale CUBE_SIZE
   end
 
   def finish(message)
@@ -85,7 +79,7 @@ class Madness < SimplePhysicsGame
 
   def create_obstacle(details)
     handler = input
-    obstacle_action = ObstacleAction.new self, @cube_geom
+    obstacle_action = ObstacleAction.new self
     color_for = {'freezer' => ColorRGBA.blue, 'bumper' => ColorRGBA.yellow, 'goal' => ColorRGBA.red}
 
     root_node << physics_space.create_static do
@@ -97,32 +91,29 @@ class Madness < SimplePhysicsGame
     end
   end
 
-  def create_level
+  def create_level(level=1)
     root_node << @floor = physics_space.create_static do
       geometry(Box.new("floor", Vector3f.new, LEVEL_SIZE, 1.m, LEVEL_SIZE)).texture("data/texture/wall.jpg", Vector3f.new(30, 30, 30))
     end
     root_node << physics_space.create_static do
-      create_box("wall").scale(2*LEVEL_SIZE, 60.m, 2.m)
+      create_box("wall").scale(2*LEVEL_SIZE, 600.m, 2.m)
       at 0, 30.m, LEVEL_SIZE
     end
     root_node << physics_space.create_static do
-      create_box("wall").scale(2*LEVEL_SIZE, 60.m, 2.m)
+      create_box("wall").scale(2*LEVEL_SIZE, 600.m, 2.m)
       at 0, 30.m, -LEVEL_SIZE
     end
     root_node << physics_space.create_static do
-      create_box("wall").scale(2.m, 60.m, 2*LEVEL_SIZE)
+      create_box("wall").scale(2.m, 600.m, 2*LEVEL_SIZE)
       at LEVEL_SIZE, 30.m, 0
     end
     root_node << physics_space.create_static do
-      create_box("wall").scale(2.m, 60.m, 2*LEVEL_SIZE)
+      create_box("wall").scale(2.m, 600.m, 2*LEVEL_SIZE)
       at -LEVEL_SIZE, 30.m, 0
     end
-  end
 
-  def create_obstacles
-    YAML.load_file(File.dirname(__FILE__) + "/madness/levels/1.yml").each do |o|
-      create_obstacle o
-    end
+    YAML.load_file(File.dirname(__FILE__) + 
+                   "/madness/levels/#{level}.yml").each {|o| create_obstacle o }
   end
 
   def create_icecube
@@ -132,29 +123,32 @@ class Madness < SimplePhysicsGame
       texture "data/images/Monkey.jpg"
       at *START
     end
-    @cube_geom = @icecube.get_child(0)
   end
 
   def create_camera
-    options = {ThirdPersonMouseLook::PROP_MAXROLLOUT => 24.m.to_s,
-      ThirdPersonMouseLook::PROP_MINROLLOUT => 12.m.to_s,
-      ThirdPersonMouseLook::PROP_MAXASCENT => 45.deg_in_rad.to_s,
-      ChaseCamera::PROP_INITIALSPHERECOORDS => Vector3f.new(5,0, 35.deg_in_rad),
-      ChaseCamera::PROP_DAMPINGK => 16.m.to_s,
-      ChaseCamera::PROP_SPRINGK => 36.m.to_s
-    }
+    # Reposition camera behind icecube initially
+    cam.location = Vector3f(390, 10, 390)
 
-    @chaser = ChaseCamera.new(cam, @cube_geom, options)
-    @chaser.min_distance, @chaser.max_distance = 128.m, 256.m
+    # set up our chase camera so we can follow the icecube
+    @chaser = ChaseCamera.create(cam, @icecube.geometry) do
+      mouse_look.min_roll_out, mouse_look.max_roll_out = 12.m, 24.m
+      mouse_look.max_ascent = 45.deg_in_rad
+      damping_k, spring_k = 36.m, 16.m
+      min_distance, max_distance = 256.m, 128.m      
+      set_ideal_sphere_coords Vector3f(20, 0, 35.deg_in_rad)
+    end
   end
 
   def create_keybindings
     KeyBindingManager.key_binding_manager.remove ["toggle_lights", "mem_report"]
     mag = 700
-    keybinding(KeyInput::KEY_J, MoveAction.new(@icecube, Vector3f(-mag, 0, 0)))
-    keybinding(KeyInput::KEY_K, MoveAction.new(@icecube, Vector3f(mag, 0, 0)))
-    keybinding(KeyInput::KEY_H, MoveAction.new(@icecube, Vector3f(0, 0, -mag)))
-    keybinding(KeyInput::KEY_L, MoveAction.new(@icecube, Vector3f(0, 0, mag)))
+    north, south, west, east = Vector3f(-mag, 0, 0), Vector3f(mag, 0, 0),
+      Vector3f(0, 0, -mag), Vector3f(0, 0, mag)
+
+    keybinding(KeyInput::KEY_J, MoveAction.new(@icecube, north))
+    keybinding(KeyInput::KEY_K, MoveAction.new(@icecube, south))
+    keybinding(KeyInput::KEY_H, MoveAction.new(@icecube, west))
+    keybinding(KeyInput::KEY_L, MoveAction.new(@icecube, east))
     keybinding(KeyInput::KEY_R, proc { |event| reset })
   end
 
