@@ -75,6 +75,9 @@ class KeyBindingManager
 end
 
 class KeyInputAction
+  # Make an action which will invoke the supplied block every time there
+  # is an action event:
+  #   forward = KeyInputAction.impl { |event| node.accelerate event.time }
   def self.impl(&block)
     ConcreteKeyInputAction.new(&block)
   end
@@ -88,5 +91,13 @@ class ConcreteKeyInputAction < KeyInputAction
     
   def performAction(event)
     @block.call event
+  end
+end
+
+class ChaseCamera
+  def self.create(camera, target, &code)
+    camera = ChaseCamera.new camera, target
+    code.arity == 1 ? code[self] : camera.instance_eval(&code) if block_given?
+    camera
   end
 end
