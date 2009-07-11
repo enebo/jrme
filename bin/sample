@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # XXX: Change me to where you checkout jmonkeyengine source distro
-export JME_DIR=../jmonkeyengine
+export JME_DIR=../jME
 
 export JME_DIST_DIR=$JME_DIR/target
 export JME_LIB_DIR=$JME_DIR/lib
