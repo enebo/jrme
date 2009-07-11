@@ -253,10 +253,7 @@ class FlagRush < BaseGame
   end
     
   def build_sky_box
-    @skybox = Skybox.new("skybox", 10, 10, 10,
-      "/data/texture/north.jpg", "/data/texture/south.jpg", 
-      "/data/texture/east.jpg", "/data/texture/west.jpg", 
-      "/data/texture/top.jpg", "/data/texture/bottom.jpg")
+    @skybox = Skybox.new("skybox", 10, 10, 10, "/data/skyboxes/mountains/")
     @skybox.updateRenderState
   end
     

@@ -153,10 +153,7 @@ class Madness < SimplePhysicsGame
   end
 
   def create_sky
-    root_node << Skybox.new("skybox", 500.m, 500.m, 500.m,
-       "data/texture/north.jpg", "data/texture/south.jpg",
-       "data/texture/east.jpg", "data/texture/west.jpg",
-       "data/texture/top.jpg", "data/texture/bottom.jpg")
+    root_node << Skybox.new("sky", 500.m,500.m,500.m, "/data/skyboxes/mountains/")
   end
 
   def create_status

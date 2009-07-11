@@ -257,22 +257,28 @@ class FlagRush < BaseGame
   def build_sky_box
     @skybox = Skybox.new("skybox", 10, 10, 10)
 
-    north = TextureManager.load_texture(resource("data/texture/north.jpg"),
+    north = TextureManager.loadTexture(
+            resource("data/skyboxes/mountains/north.jpg"),
             Texture::MinificationFilter::BilinearNearestMipMap,
             Texture::MagnificationFilter::Bilinear)
-    south = TextureManager.load_texture(resource("data/texture/south.jpg"),
+    south = TextureManager.loadTexture(
+            resource("data/skyboxes/mountains/south.jpg"),
             Texture::MinificationFilter::BilinearNearestMipMap,
             Texture::MagnificationFilter::Bilinear)
-    east = TextureManager.load_texture(resource("data/texture/east.jpg"),
+    east = TextureManager.loadTexture(
+            resource("data/skyboxes/mountains/east.jpg"),
             Texture::MinificationFilter::BilinearNearestMipMap,
             Texture::MagnificationFilter::Bilinear)
-    west = TextureManager.load_texture(resource("data/texture/west.jpg"),
+    west = TextureManager.loadTexture(
+            resource("data/skyboxes/mountains/west.jpg"),
             Texture::MinificationFilter::BilinearNearestMipMap,
             Texture::MagnificationFilter::Bilinear)
-    up = TextureManager.load_texture(resource("data/texture/top.jpg"),
+    up = TextureManager.loadTexture(
+            resource("data/skyboxes/mountains/up.jpg"),
             Texture::MinificationFilter::BilinearNearestMipMap,
             Texture::MagnificationFilter::Bilinear)
-    down = TextureManager.load_texture(resource("data/texture/bottom.jpg"),
+    down = TextureManager.loadTexture(
+            resource("data/skyboxes/mountains/down.jpg"),
             Texture::MinificationFilter::BilinearNearestMipMap,
             Texture::MagnificationFilter::Bilinear)
 
