@@ -55,7 +55,10 @@ import com.jme.scene.Spatial
 import com.jme.scene.Text
 import com.jme.scene.shape.Box
 import com.jme.scene.shape.Cylinder
+import com.jme.scene.shape.Dome
+import com.jme.scene.shape.MultiFaceBox
 import com.jme.scene.shape.Quad
+import com.jme.scene.shape.RoundedBox
 import com.jme.scene.shape.Sphere
 import com.jme.scene.shape.Torus
 import com.jme.scene.state.BlendState

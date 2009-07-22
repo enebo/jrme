@@ -1,3 +1,5 @@
+require 'jme'
+
 import com.jmex.physics.DynamicPhysicsNode
 import com.jmex.physics.PhysicsNode
 import com.jmex.physics.PhysicsSpace

@@ -7,6 +7,10 @@ class Numeric
     memo *= 10
   end
 
+  def samples
+    self
+  end
+
   def deg_in_rad
     self * FastMath::DEG_TO_RAD
   end

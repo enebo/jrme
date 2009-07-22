@@ -7,6 +7,18 @@ end
 
 class Vector3f
   def to_s
+    inspect
+  end
+
+  def *(*args)
+    mult *args
+  end
+
+  def /(*args)
+    divide *args
+  end
+
+  def inspect
     "[#{format("%0.2d", x)}, #{format("%0.2d", y)}, #{format("%0.2d", z)}]"
   end
 end

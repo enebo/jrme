@@ -5,6 +5,7 @@ pkg
 doc
 build.xml
 nbproject
+properties.cfg
 TAGS
 *~
 *.log
