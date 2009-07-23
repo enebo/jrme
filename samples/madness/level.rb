@@ -10,13 +10,13 @@ class FloorDim < Struct.new(:level, :width, :height, :x, :y, :lines)
 
   # Calculates center of floor as boxes in JME are center of area + extent 
   def floor_location_extent
-    x, width_m = level.to_m(x), level.to_m(width)
-    center_x = x + width_m / 2
-    z, height_m = level.to_m(y), level.to_m(height)
-    center_z = z + height_m / 2
-    y = 10.m
+    i, width_m = level.to_m(x), level.to_m(width)
+    center_i = i + width_m / 2
+    j, height_m = level.to_m(y), level.to_m(height)
+    center_j = j + height_m / 2
+    k = 10.m
     nub = level.to_m(0.5) # A 0 index will render on edge of board shift 1/2u
-    return [center_z - nub, -3.m, center_x - nub], [height_m / 2, y, width_m / 2]
+    return [center_j - nub, -3.m, center_i - nub], [height_m / 2, k, width_m / 2]
   end
 
   def location(i, j, k)
@@ -60,11 +60,9 @@ class Level
   end
 
   def process_floors(data)
-    data[:floors].each do |floor_description|
-      lines = floor_description[:data].split(/\n/)
-      width, x = lines[0].length, floor_description[:location][0]
-      height, y = lines.length, floor_description[:location][1]
-      puts "DATA #{floor_description[:data]} (#{x}, #{y}), #{width}x#{height}"
+    data[:floors].each do |floor|
+      lines = floor[:data].split(/\n/)
+      width, height, x, y, z = lines[0].length, lines.length, *floor[:location]
       @floors << FloorDim.new(self, width, height, x, y, lines).load
     end
   end
@@ -76,5 +74,6 @@ class Level
     @game.chaser = camera.create_physics(@game)
     floors.each { |floor| root << floor.create_physics(@game, action) }
     obstacles.each { |obstacle| root << obstacle.create_physics(@game, action) }
+    root << Skybox.new("sky", 1000.m,1000.m,1000.m, skybox)
   end
 end

@@ -15,7 +15,6 @@ class Madness < SimplePhysicsGame
       (@icecube == contact.node1 ? contact.node2 : contact.node1).execute
     end
     @velocity_holder, @level = Vector3f.new, Level.new(self, 1)
-    root_node << Skybox.new("sky", 1000.m,1000.m,1000.m, @level.skybox)
     create_keybindings
     create_status
 
