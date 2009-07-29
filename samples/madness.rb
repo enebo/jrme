@@ -1,3 +1,10 @@
+# Issues:
+# 1. Multiple textures created, but they are the same....Does JME notice?
+# 2. cannot blinkdly remove all elements in the scene since it may remove
+#    more than we  want
+# 3. We do not keep track of physics nodes but our Ruby objects...we hsould
+#     Can I detach physics node and have it disappear from scene graph
+# 4. Should I also add obstacles to floor?
 require 'jmephysics'
 require 'types'
 require 'level'
@@ -40,6 +47,7 @@ class Madness < SimplePhysicsGame
     @icecube.set_linear_velocity(Vector3f(0,0,0))
     @icecube.set_angular_velocity(Vector3f(0,0,0))
     @icecube.scale CUBE_SIZE
+    self.pause = false
     flash ""
   end
 

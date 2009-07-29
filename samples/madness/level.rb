@@ -26,18 +26,20 @@ class FloorDim < Struct.new(:level, :width, :height, :x, :y, :lines)
   def load
     0.upto(width - 1) { |j| 0.upto(height - 1) { |i| process(i, j, 0.m) } }
 
-    Floor.new *floor_location_extent
+    Floor.create level.game, level.game.collision_action, *floor_location_extent
   end
 
   def process(i, j, k)
     ai, aj, ak = i + y, j + x, k
+    g, o = level.game, level.game.collision_action
+    
     case lines[i][j]
-    when BUMPER: level.obstacles << Bumper.new(location(ai, ak, aj))
-    when DOUBLER: level.obstacles << Doubler.new(location(ai, ak + 7.m, aj))
-    when FREEZER: level.obstacles << Freezer.new(location(ai, ak, aj))
-    when GOAL: level.obstacles << Goal.new(location(ai, ak, aj))
-    when PLAYER: level.player = Player.new(location(ai, ak + 7.m, aj))
-    when CAMERA: level.camera = Camera.new(location(ai, ak, aj))
+    when BUMPER: level.obstacles << Bumper.create(g, location(ai, ak, aj), o)
+    when DOUBLER: level.obstacles << Doubler.create(g, location(ai, ak + 7.m, aj), o)
+    when FREEZER: level.obstacles << Freezer.create(g, location(ai, ak, aj), o)
+    when GOAL: level.obstacles << Goal.create(g, location(ai, ak, aj), o)
+    when PLAYER: level.player = Player.create(g, location(ai, ak + 7.m, aj))
+    when CAMERA: level.camera_location = location(ai, ak, aj)
     end
   end
 end
@@ -45,7 +47,8 @@ end
 class Level
   UNIT, DEFAULT_SKYBOX = 32, "data/texture/wall.jpg"
   include GameTypes
-  attr_accessor :player, :camera, :skybox, :floors, :obstacles
+  attr_accessor :player, :camera, :skybox, :floors, :obstacles, :game
+  attr_accessor :camera_location
 
   def initialize(game, level=1)
     data = eval File.readlines("#{File.dirname(__FILE__)}/levels/#{level}").join('')
@@ -69,11 +72,11 @@ class Level
 
   def setup
     root, action = @game.root_node, @game.collision_action
-    root << @game.icecube = player.create_physics(@game)
-    @game.cam.location = Vector3f *camera.location
-    @game.chaser = camera.create_physics(@game)
-    floors.each { |floor| root << floor.create_physics(@game, action) }
-    obstacles.each { |obstacle| root << obstacle.create_physics(@game, action) }
+    root << @game.icecube = player
+    @game.cam.location = Vector3f *camera_location
+    @game.chaser = Camera.create(@game, camera_location)
+    floors.each { |floor| root << floor }
+    obstacles.each { |obstacle| root << obstacle }
     root << Skybox.new("sky", 1000.m,1000.m,1000.m, skybox)
   end
 end

@@ -1,13 +1,17 @@
 class PhysicsSpace
   def create_dynamic(options = {}, &code)
+    options[:name] ||= "dynamic"
     node = createDynamicNode
+    node.name = options[:name]
     node.options = options
     code.arity == 1 ? code[self] : node.instance_eval(&code) if block_given?
     node.frobnicate
   end
 
   def create_static(options = {}, &code)
+    options[:name] ||= "static"
     node = createStaticNode
+    node.name = options[:name]
     node.options = options
     code.arity == 1 ? code[self] : node.instance_eval(&code) if block_given?
     node.frobnicate

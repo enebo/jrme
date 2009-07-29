@@ -1,7 +1,5 @@
-class Obstacle < Struct.new(:location); end
-
-class Player < Obstacle
-  def create_physics(game)
+class Player
+  def self.create(game, location)
     game.physics_space.create_dynamic(:location => location) do
       geometry MultiFaceCube("Icecube", Madness::CUBE_SIZE)
       made_of Material::ICE
@@ -11,8 +9,8 @@ class Player < Obstacle
   end
 end
 
-class Camera < Obstacle
-  def create_physics(game)
+class Camera
+  def self.create(game, location)
     ChaseCamera.create(game.cam, game.icecube.geometry) do
       mouse_look.min_roll_out, mouse_look.max_roll_out = 12.m, 24.m
       mouse_look.max_ascent = 45.deg_in_rad
@@ -23,8 +21,8 @@ class Camera < Obstacle
   end
 end
 
-class Goal < Obstacle
-  def create_physics(game, collision_action)
+class Goal
+  def self.create(game, location, collision_action)
     game.physics_space.create_static(:location => location) do
       collision { game.finish("  Goal!!") }
       geometry Sphere('Goal', 16.samples, 16.samples, 16.m)
@@ -36,8 +34,8 @@ class Goal < Obstacle
   end
 end
 
-class Freezer < Obstacle
-  def create_physics(game, collision_action)
+class Freezer
+  def self.create(game, location, collision_action)
     game.physics_space.create_static(:location => location) do
       collision { game.icecube.scale Madness::CUBE_SIZE }
       geometry Sphere('Freezer', 16.samples, 16.samples, 16.m)
@@ -49,8 +47,8 @@ class Freezer < Obstacle
   end
 end
 
-class Bumper < Obstacle
-  def create_physics(game, collision_action)
+class Bumper
+  def self.create(game, location, collision_action)
     game.physics_space.create_static(:location => location) do
       geometry Dome.new('Bumper', 16.samples, 16.samples, 16.m)
       made_of Material::RUBBER
@@ -60,8 +58,8 @@ class Bumper < Obstacle
   end
 end
 
-class Doubler < Obstacle
-  def create_physics(game, collision_action)
+class Doubler
+  def self.create(game, location, collision_action)
     game.physics_space.create_dynamic(:location => location) do
       geometry Sphere('Bumper', 16.samples, 16.samples, 4.m)
       made_of Material::RUBBER
@@ -84,16 +82,10 @@ class Doubler < Obstacle
   end
 end
 
-class Floor < Obstacle
-  def initialize(location, size)
-    super(location)
-    @size, @texture, @texture_scale =size, "data/texture/wall.jpg", [30, 30, 30]
-  end
-
-  def create_physics(game, collision_action)
-    size, texture, texture_scale = @size, @texture, @texture_scale
-    @node = game.physics_space.create_static(:location => location) do
-      geometry(Box.new("floor", Vector3f.new, *size)).texture(texture, Vector3f(*texture_scale))
+class Floor
+  def self.create(game, collision_action, location, size)
+    @node = game.physics_space.create_static(:location => location, :texture => "data/texture/wall.jpg", :texture_scale => [30, 30, 30]) do
+      geometry(Box.new("floor", Vector3f.new, *size)).texture(options[:texture], Vector3f(*options[:texture_scale]))
       made_of Material::RUBBER
       at *options[:location]
     end
