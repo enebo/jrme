@@ -30,7 +30,7 @@ class Madness < SimplePhysicsGame
       @time += time
       return unless @time > 0.5
       return finish(LOSE_MESSAGE) if @icecube.scale.x < 1.mm
-      # @icecube.scale @icecube.scale.x - 5.cm
+      @icecube.scale @icecube.scale.x - 1.cm
       @time = 0.0
     end
   end
@@ -42,8 +42,8 @@ class Madness < SimplePhysicsGame
   end
 
   def reset
-    cam.location = Vector3f *@level.camera.location
-    @icecube.at *@level.player.location
+    cam.location = Vector3f *@level.camera_location
+    @icecube.at *@level.player_location
     @icecube.set_linear_velocity(Vector3f(0,0,0))
     @icecube.set_angular_velocity(Vector3f(0,0,0))
     @icecube.scale CUBE_SIZE

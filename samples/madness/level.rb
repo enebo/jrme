@@ -38,7 +38,9 @@ class FloorDim < Struct.new(:level, :width, :height, :x, :y, :lines)
     when DOUBLER: level.obstacles << Doubler.create(g, location(ai, ak + 7.m, aj), o)
     when FREEZER: level.obstacles << Freezer.create(g, location(ai, ak, aj), o)
     when GOAL: level.obstacles << Goal.create(g, location(ai, ak, aj), o)
-    when PLAYER: level.player = Player.create(g, location(ai, ak + 7.m, aj))
+    when PLAYER: 
+        level.player_location = location(ai, ak + 7.m, aj)
+        level.player = Player.create(g, level.player_location)
     when CAMERA: level.camera_location = location(ai, ak, aj)
     end
   end
@@ -48,7 +50,7 @@ class Level
   UNIT, DEFAULT_SKYBOX = 32, "data/texture/wall.jpg"
   include GameTypes
   attr_accessor :player, :camera, :skybox, :floors, :obstacles, :game
-  attr_accessor :camera_location
+  attr_accessor :camera_location, :player_location
 
   def initialize(game, level=1)
     data = eval File.readlines("#{File.dirname(__FILE__)}/levels/#{level}").join('')
