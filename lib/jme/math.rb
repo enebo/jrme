@@ -21,6 +21,10 @@ class Vector3f
   def inspect
     "[#{format("%0.2d", x)}, #{format("%0.2d", y)}, #{format("%0.2d", z)}]"
   end
+
+  def to_a
+    [x, y, z]
+  end
 end
 
 # Definition of normalized vectors about the main axis'
