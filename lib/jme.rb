@@ -123,17 +123,6 @@ module RandomHelper
   end
 end
 
-module TextureHelper
-  def texture(url, scale=nil, repeat=Texture::WrapMode::Repeat)
-    texture_state = DisplaySystem.display_system.renderer.createTextureState
-    texture = TextureManager.load(resource(url))
-    texture.wrap = repeat
-    texture.scale = scale if scale
-    texture_state.texture = texture
-    setRenderState texture_state
-  end
-end
-
 class TextureManager
   def self.load_from_image(image, min_filter=:Trilinear, max_filter=:Bilinear, flipped=true)
     TextureManager.loadTexture(image, min(min_filter), max(max_filter), flipped)

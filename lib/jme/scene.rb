@@ -1,3 +1,6 @@
+require 'jrme/colors'
+require 'jrme/textures'
+
 class Geometry
   def collides_with?(other)
     has_collision(other, false)
@@ -10,7 +13,7 @@ class Geometry
 end
 
 class Node
-  include TextureHelper
+  include JRME::Textures
   
   def <<(child)
     attachChild(child)
@@ -58,7 +61,7 @@ class Skybox
 end
 
 class Spatial
-  include TextureHelper
+  include JRME::Colors, JRME::Textures
 
   field_reader :parent
 
@@ -77,20 +80,7 @@ class Spatial
   end
 
   def color(color)
-    renderer = DisplaySystem.display_system.renderer
-    material_state = renderer.createMaterialState.set! :diffuse => color
-
-    # Some alpha value.  We need to do more to make it look ok.
-    if color.a < 1
-        blend_state = renderer.createBlendState.set! :enabled => true,
-          :blend_enabled => true, 
-          :source_function => BlendState::SourceFunction::SourceAlpha,
-          :destination_function => BlendState::DestinationFunction::OneMinusSourceAlpha
-        setRenderState blend_state
-        setRenderQueueMode Renderer::QUEUE_TRANSPARENT
-    end
-
-    setRenderState material_state
+    diffuse(color)
   end
   
   # The assumption is that renderpass is the most common for a common spatial.
