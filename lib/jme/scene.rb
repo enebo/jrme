@@ -68,6 +68,14 @@ class Spatial
     updateRenderState
   end
 
+  def location
+    local_translation.to_a
+  end
+
+  def location=(x, y, z)
+    local_translation.set(x, y, z)
+  end
+
   def color(color)
     renderer = DisplaySystem.display_system.renderer
     material_state = renderer.createMaterialState.set! :diffuse => color
