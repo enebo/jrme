@@ -2,7 +2,7 @@ class PhysicsSpace
   def create_dynamic(options = {}, &code)
     options[:name] ||= "dynamic"
     node = createDynamicNode
-    node.name = options[:name]
+    node.name = options[:name].to_s
     node.options = options
     code.arity == 1 ? code[self] : node.instance_eval(&code) if block_given?
     node.frobnicate
@@ -11,7 +11,7 @@ class PhysicsSpace
   def create_static(options = {}, &code)
     options[:name] ||= "static"
     node = createStaticNode
-    node.name = options[:name]
+    node.name = options[:name].to_s
     node.options = options
     code.arity == 1 ? code[self] : node.instance_eval(&code) if block_given?
     node.frobnicate
@@ -35,6 +35,7 @@ class PhysicsNode
   # Give this physics node a geometrical shape or retrieve physical node
   def geometry(physical_node=nil)
     return get_child(0) unless physical_node
+
     attach_child physical_node
     physical_node
   end
