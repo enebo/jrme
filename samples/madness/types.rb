@@ -1,6 +1,6 @@
 class Player
   def self.create(game, location)
-    game.physics_space.create_dynamic(:location => location) do
+    game.physics_space.create_dynamic(:name => :player, :location => location) do
       geometry MultiFaceCube("Icecube", Madness::CUBE_SIZE)
       made_of Material::ICE
       texture "data/nekobean_smile.png"
@@ -23,7 +23,7 @@ end
 
 class Goal
   def self.create(game, location, collision_action)
-    game.physics_space.create_static(:location => location) do
+    game.physics_space.create_static(:name => :goal, :location => location) do
       collision { game.finish("  Goal!!") }
       geometry Sphere('Goal', 16.samples, 16.samples, 16.m)
       made_of Material::IRON
@@ -36,7 +36,7 @@ end
 
 class Freezer
   def self.create(game, location, collision_action)
-    game.physics_space.create_static(:location => location) do
+    game.physics_space.create_static(:name => :freezer, :location => location) do
       collision { game.icecube.scale Madness::CUBE_SIZE }
       geometry Sphere('Freezer', 16.samples, 16.samples, 16.m)
       made_of Material::ICE
@@ -49,7 +49,7 @@ end
 
 class Bumper
   def self.create(game, location, collision_action)
-    game.physics_space.create_static(:location => location) do
+    game.physics_space.create_static(:name => :bumper, :location => location) do
       geometry Dome.new('Bumper', 16.samples, 16.samples, 16.m)
       made_of Material::RUBBER
       color ColorRGBA.yellow
@@ -60,7 +60,7 @@ end
 
 class Doubler
   def self.create(game, location, collision_action)
-    game.physics_space.create_dynamic(:location => location) do
+    game.physics_space.create_dynamic(:name => :doubler, :location => location) do
       geometry Sphere('Bumper', 16.samples, 16.samples, 4.m)
       made_of Material::RUBBER
       color ColorRGBA.yellow
@@ -84,7 +84,7 @@ end
 
 class Floor
   def self.create(game, collision_action, location, size)
-    @node = game.physics_space.create_static(:location => location, :texture => "data/texture/wall.jpg", :texture_scale => [30, 30, 30]) do
+    @node = game.physics_space.create_static(:name => :floor, :location => location, :texture => "data/texture/wall.jpg", :texture_scale => [30, 30, 30]) do
       geometry(Box.new("floor", Vector3f.new, *size)).texture(options[:texture], Vector3f(*options[:texture_scale]))
       made_of Material::RUBBER
       at *options[:location]
