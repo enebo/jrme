@@ -70,6 +70,9 @@ class Madness < SimplePhysicsGame
     key(KeyInput::KEY_H, proc { |v| @icecube.add_force w if v.trigger_pressed })
     key(KeyInput::KEY_L, proc { |v| @icecube.add_force e if v.trigger_pressed })
     key(KeyInput::KEY_R, proc { |event| reset })
+    key(KeyInput::KEY_G, proc do |v|
+        DisplaySystem.display_system.gamma = DisplaySystem.display_system.gamma - 0.025
+    end)
   end
 
   def create_status
