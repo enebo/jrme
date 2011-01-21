@@ -51,6 +51,10 @@ module Kernel
     Sphere.new(name, Vector3f.new, z_samples, radial_samples, radius)
   end
 
+  def Box(name, width, height, depth)
+    Box.new(name, Vector3f.new, width, height, depth)
+  end
+
   def Cube(name, size)
     Cube.new(name, Vector3f.new, size)
   end
