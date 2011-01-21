@@ -1,5 +1,6 @@
 require 'java'
 
+java_import java.awt.Font
 java_import java.lang.System
 java_import java.nio.FloatBuffer
 java_import javax.swing.ImageIcon
@@ -12,6 +13,7 @@ java_import com.jme.app.SimpleGame
 java_import com.jme.app.SimplePassGame
 java_import com.jme.bounding.BoundingBox
 java_import com.jme.bounding.BoundingSphere
+java_import com.jme.bounding.OrientedBoundingBox
 java_import com.jme.image.Texture
 java_import com.jme.input.AbsoluteMouse
 java_import com.jme.input.ChaseCamera
@@ -36,7 +38,7 @@ java_import com.jme.light.PointLight
 java_import com.jme.light.SimpleLightNode
 java_import com.jme.math.FastMath
 java_import com.jme.math.Plane
-java_import com.jme.math.Ray;
+java_import com.jme.math.Ray
 java_import com.jme.math.Quaternion
 java_import com.jme.math.Matrix3f
 java_import com.jme.math.Vector2f
@@ -70,15 +72,25 @@ java_import com.jme.scene.state.TextureState
 java_import com.jme.scene.state.ZBufferState
 java_import com.jme.system.DisplaySystem
 java_import com.jme.system.JmeException
+java_import com.jme.util.GameTaskQueueManager
 java_import com.jme.util.TextureManager
 java_import com.jme.util.Timer
 java_import com.jme.util.export.binary.BinaryImporter
 java_import com.jme.util.export.binary.BinaryExporter
+java_import com.jmex.angelfont.BitmapFont
+java_import com.jmex.angelfont.BitmapText
+java_import com.jmex.angelfont.BitmapFontLoader
+java_import com.jmex.angelfont.Rectangle
 java_import com.jmex.effects.cloth.ClothPatch
 java_import com.jmex.effects.cloth.ClothUtils
 java_import com.jmex.effects.particles.ParticleFactory
 java_import com.jmex.effects.particles.ParticleMesh
 java_import com.jmex.effects.water.WaterRenderPass
+java_import com.jmex.font3d.Font3D
+java_import com.jmex.font3d.effects.Font3DTexture
+java_import com.jmex.game.StandardGame
+java_import com.jmex.game.state.DebugGameState
+java_import com.jmex.game.state.GameStateManager
 java_import com.jmex.model.collada.ColladaImporter
 java_import com.jmex.terrain.TerrainBlock
 java_import com.jmex.terrain.TerrainPage
