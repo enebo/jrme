@@ -30,6 +30,7 @@ java_import com.jme.input.action.KeyNodeForwardAction
 java_import com.jme.input.action.KeyNodeRotateLeftAction
 java_import com.jme.input.action.KeyNodeRotateRightAction
 java_import com.jme.input.thirdperson.ThirdPersonMouseLook
+java_import com.jme.intersection.BoundingCollisionResults
 java_import com.jme.intersection.BoundingPickResults
 java_import com.jme.intersection.PickResults
 java_import com.jme.light.DirectionalLight
